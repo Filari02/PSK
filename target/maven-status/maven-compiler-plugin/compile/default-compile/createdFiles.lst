@@ -1,0 +1,10 @@
+com\psk1\entities\Exhibition.class
+com\psk1\HelloServlet.class
+com\psk1\entities\Artwork.class
+com\psk1\mybatis\dao\AuthorMapper.class
+com\psk1\mybatis\model\Exhibition.class
+com\psk1\mybatis\dao\ExhibitionMapper.class
+com\psk1\mybatis\model\Author.class
+com\psk1\entities\Author.class
+com\psk1\mybatis\dao\ArtworkMapper.class
+com\psk1\mybatis\model\Artwork.class
