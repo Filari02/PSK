@@ -9,6 +9,9 @@
     -->
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="NAME" jdbcType="VARCHAR" property="name" />
+    <collection property="artworks" javaType="ArrayList"
+                ofType="Artwork" column="id"
+                select="selectArtworksInExhibition" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--
@@ -57,4 +60,12 @@
     select ID, NAME
     from PUBLIC.EXHIBITION
   </select>
+  <select id="selectArtworksInExhibition" resultType="Artwork">
+    SELECT a.id, a.name
+    FROM public.ARTWORK a
+        JOIN public.EXHIBITION e on a.exhibition_id = e.id
+    WHERE b.id = #{id,jdbcType=INTEGER}
+
+  </select>
+
 </mapper>

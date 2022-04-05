@@ -10,12 +10,12 @@
     <id column="ID" jdbcType="BIGINT" property="id" />
     <result column="ARTWORKNAME" jdbcType="VARCHAR" property="artworkname" />
     <result column="EXHIBITION_ID" jdbcType="BIGINT" property="exhibitionId" />
-<!--    <association property="exhibition"-->
-<!--                 columnPrefix="exhibition_"-->
-<!--                 resultMap="com.psk1.mybatis.dao.ExhibitionMapper.BaseResultMap"/>-->
-<!--    <collection property="authors" javaType="ArrayList"-->
-<!--                ofType="Author" column="id"-->
-<!--                select="selectAuthorForArtwork"/>-->
+    <association property="exhibition"
+                 columnPrefix="exhibition_"
+                 resultMap="com.psk1.mybatis.dao.ExhibitionMapper.BaseResultMap"/>
+    <collection property="authors" javaType="ArrayList"
+                ofType="Author" column="id"
+                select="selectAuthorForArtwork"/>
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     <!--

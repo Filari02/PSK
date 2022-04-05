@@ -1,5 +1,8 @@
 package com.psk1.mybatis.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.List;
 
 public class Artwork {
@@ -30,8 +33,10 @@ public class Artwork {
      */
     private Long exhibitionId;
 
+    @Getter@Setter
     private Exhibition exhibition;
 
+    @Getter@Setter
     private List<Author> authors;
 
     /**
