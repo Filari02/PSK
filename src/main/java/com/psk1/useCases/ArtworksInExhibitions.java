@@ -7,37 +7,41 @@ import com.psk1.persistence.ExhibitionsDAO;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Model;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 @Model
 public class ArtworksInExhibitions implements Serializable {
 
     @Inject
-    private ArtworksDAO artworksDAO;
-
-    @Inject
     private ExhibitionsDAO exhibitionsDAO;
 
-    @Getter@Setter
+    @Inject
+    private ArtworksDAO artworksDAO;
+
+    @Getter
+    @Setter
     private Exhibition exhibition;
 
+    @Getter @Setter
+    private Artwork artworkToCreate = new Artwork();
 
-
-    public List<Artwork> getExhibitionArtworks (Exhibition exhibition) {
-        this.exhibition = exhibitionsDAO.findOne(exhibition.getId());
-        System.out.println(this.exhibition.getName());
-        return this.exhibition.getArtworks();
-
+    @PostConstruct
+    public void init() {
+        Map<String, String> requestParameters =
+                FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        Integer exhibitionId = Integer.parseInt(requestParameters.get("exhibitionId"));
+        this.exhibition = exhibitionsDAO.findOne(exhibitionId);
     }
 
-//    @PostConstruct
-//    public void init() {
-//        Map<String, String> requestParameters =
-//                FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-//        Integer exhibitionId = Integer.parseInt(requestParameters.get("exhibitionId"));
-//        this.exhibition = exhibitionsDAO.findOne(exhibitionId);
-//    }
+    @Transactional
+    public void createArtwork() {
+        artworkToCreate.setExhibition(this.exhibition);
+        artworksDAO.persist(artworkToCreate);
+    }
 }

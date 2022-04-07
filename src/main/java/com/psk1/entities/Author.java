@@ -8,11 +8,15 @@ import java.util.List;
 
 @Entity
 @Getter@Setter
+@NamedQueries({
+        @NamedQuery(name = "Author.findAll", query = "select e from Author as e")
+})
+@Table(name = "AUTHOR")
 public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Basic
     private String name;

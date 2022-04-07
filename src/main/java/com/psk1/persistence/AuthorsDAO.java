@@ -1,5 +1,6 @@
 package com.psk1.persistence;
 
+import com.psk1.entities.Author;
 import com.psk1.entities.Exhibition;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -8,24 +9,26 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @ApplicationScoped
-public class ExhibitionsDAO {
+public class AuthorsDAO {
 
     @Inject
     private EntityManager em;
 
-    public List<Exhibition> loadAll() {
-        return em.createNamedQuery("Exhibition.findAll", Exhibition.class).getResultList();
+    public List<Author> loadAll() {
+        return em.createNamedQuery("Author.findAll", Author.class).getResultList();
     }
 
     public void setEm(EntityManager em) {
         this.em = em;
     }
 
-    public void persist(Exhibition exhibition){
-        this.em.persist(exhibition);
+    public void persist(Author author){
+        this.em.persist(author);
     }
 
-    public Exhibition findOne(Integer id) {
-        return em.find(Exhibition.class, id);
+    public Author findOne(Integer id) {
+        return em.find(Author.class, id);
     }
+
+
 }

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head/>
+<h:body>
+    <h2>Authors for artwork #{artworksWithAuthors.artwork.name}</h2>
+    <ol>
+        <ui:repeat value="#{artworksWithAuthors.artwork.authors}" var="author">
+            <li>#{author.name}</li>
+        </ui:repeat>
+    </ol>
+    <h:form>
+        <h:inputText a:placeholder="name" value="#{artworksWithAuthors.authorToCreate.name}" required="true" />
+        <h:commandButton value="Add author for artwork"
+                         actionListener="#{artworksWithAuthors.createAuthor}"
+                         action="#{'artworksAuthor?faces-redirect=true&amp;artworkId='.concat(artworksWithAuthors.artwork.id)}">
+            <f:param name="artworkId" value="#{artworksWithAuthors.artwork.id}" />
+        </h:commandButton>
+    </h:form>
+    <h:link outcome="index" value="Back to teams page"/>
+</h:body>
+</html>

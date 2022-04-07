@@ -9,10 +9,13 @@
     <h2>Exhibitions and displayed artworks:</h2>
     <ol>
         <ui:repeat value="#{exhibitions.allExhibitions}" var="exhibition">
-            <li>#{exhibition.name}
+            <li><h:link value="#{exhibition.name}" outcome="artworks?exhibitionId=#{exhibition.id}"/>
                 <ul>
                     <ui:repeat value="#{exhibition.artworks}" var="artwork">
                     <li>  #{artwork.name} </li>
+                        <ui:repeat value="#{artwork.authors}" var="author">
+                            <p>  #{author.name} </p>
+                        </ui:repeat>
                     </ui:repeat>
                 </ul>
             </li>
