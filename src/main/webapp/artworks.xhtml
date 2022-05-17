@@ -7,7 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
 <h:head/>
 <h:body>
-    <h2>Players playing in #{artworksInExhibitions.exhibition.name} team:</h2>
+    <h2>Artworks in #{artworksInExhibitions.exhibition.name} :</h2>
     <ol>
         <ui:repeat value="#{artworksInExhibitions.exhibition.artworks}" var="artwork">
             <li>
@@ -24,6 +24,6 @@
             <f:param name="exhibitionId" value="#{artworksInExhibitions.exhibition.id}" />
         </h:commandButton>
     </h:form>
-    <h:link outcome="index" value="Back to teams page"/>
+    <h:link outcome="index" value="Back"/>
 </h:body>
 </html>

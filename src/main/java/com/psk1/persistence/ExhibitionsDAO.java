@@ -1,5 +1,6 @@
 package com.psk1.persistence;
 
+import com.psk1.entities.Author;
 import com.psk1.entities.Exhibition;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,5 +28,9 @@ public class ExhibitionsDAO {
 
     public Exhibition findOne(Integer id) {
         return em.find(Exhibition.class, id);
+    }
+
+    public Exhibition update(Exhibition exhibition){
+        return em.merge(exhibition);
     }
 }

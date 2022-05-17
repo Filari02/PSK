@@ -26,4 +26,7 @@ public class Exhibition {
     @OneToMany(mappedBy = "exhibition")
     private List<Artwork> artworks;
 
+    @Version
+    @Column(name = "OPT_LOCK_VERSION")
+    private Integer version;
 }

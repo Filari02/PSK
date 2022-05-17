@@ -14,7 +14,9 @@
                     <ui:repeat value="#{exhibition.artworks}" var="artwork">
                     <li>  #{artwork.name} </li>
                         <ui:repeat value="#{artwork.authors}" var="author">
-                            <p>  #{author.name} </p>
+                            <ul>
+                            <h:link value="#{author.name}" outcome="authorDetails?authorId=#{author.id}" />
+                            </ul>
                         </ui:repeat>
                     </ui:repeat>
                 </ul>

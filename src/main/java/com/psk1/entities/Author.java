@@ -24,4 +24,7 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     private List<Artwork> artworks;
 
+    @Version
+    @Column(name = "OPT_LOCK_VERSION")
+    private Integer version;
 }

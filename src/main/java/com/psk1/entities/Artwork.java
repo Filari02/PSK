@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
@@ -25,5 +26,8 @@ public class Artwork {
     @ManyToMany
     private List<Author> authors;
 
+    @Version
+    @Column(name = "OPT_LOCK_VERSION")
+    private Integer version;
 
 }

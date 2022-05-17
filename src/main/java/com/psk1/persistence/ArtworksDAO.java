@@ -16,11 +16,11 @@ public class ArtworksDAO {
         this.em.persist(artwork);
     }
 
-    public Artwork findOne(Integer id){
+    public Artwork findOne(Integer id) {
         return em.find(Artwork.class, id);
     }
 
-    public Artwork update(Artwork artwork){
+    public Artwork update(Artwork artwork) {
         return em.merge(artwork);
     }
 }

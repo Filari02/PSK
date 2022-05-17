@@ -30,5 +30,8 @@ public class AuthorsDAO {
         return em.find(Author.class, id);
     }
 
+    public Author update(Author author){
+        return em.merge(author);
+    }
 
 }
