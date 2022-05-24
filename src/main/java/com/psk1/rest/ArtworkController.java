@@ -11,9 +11,7 @@ import com.psk1.rest.contracts.AuthorDTO;
 import com.psk1.rest.contracts.ExhibitionDTO;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.ibatis.annotations.Delete;
 
-import javax.decorator.Delegate;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.OptimisticLockException;
@@ -38,6 +36,11 @@ public class ArtworkController {
     @Setter
     private AuthorsDAO authorsDAO;
 
+    @Inject
+    @Getter
+    @Setter
+    private ExhibitionsDAO exhibitionsDAO;
+
     @Path("/{id}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -48,19 +51,23 @@ public class ArtworkController {
         }
 
         ArtworkDTO artworkDTO = new ArtworkDTO();
-        artworkDTO.setArtworkName(artwork.getName());
-        artworkDTO.setExhibitionName(artwork.getExhibition().getName());
+        artworkDTO.setId(artwork.getId());
+        artworkDTO.setName(artwork.getName());
+
+        ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
+        exhibitionDTO.setId(artwork.getExhibition().getId());
+        exhibitionDTO.setName(artwork.getExhibition().getName());
+        artworkDTO.setExhibition(exhibitionDTO);
 
         List<AuthorDTO> authorDTOS = new ArrayList<>();
 
-        for (Author author: artwork.getAuthors()) {
+        for (Author author : artwork.getAuthors()) {
             AuthorDTO authorDTO = new AuthorDTO();
             authorDTO.setId(author.getId());
             authorDTO.setName(author.getName());
 
             authorDTOS.add(authorDTO);
         }
-
         artworkDTO.setAuthors(authorDTOS);
 
         return Response.ok(artworkDTO).build();
@@ -79,14 +86,14 @@ public class ArtworkController {
             if (existingArtwork == null) {
                 return Response.status(Response.Status.NOT_FOUND).build();
             }
-            existingArtwork.setName(artworkDTO.getArtworkName());
+            existingArtwork.setName(artworkDTO.getName());
+            Exhibition exhibition = exhibitionsDAO.findOne(artworkDTO.getExhibition().getId());
+            existingArtwork.setExhibition(exhibition);
 
             List<Author> authors = existingArtwork.getAuthors();
 
             for(AuthorDTO a : artworkDTO.getAuthors()) {
-                Author author = new Author();
-                author.setName(a.getName());
-                authorsDAO.persist(author);
+                Author author = authorsDAO.findOne(a.getId());
                 authors.add(author);
             }
             existingArtwork.setAuthors(authors);
@@ -103,22 +110,23 @@ public class ArtworkController {
     @Path("/post/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createAuthor(ArtworkDTO artworkDTO) {
+    @Transactional
+    public Response createArtwork(ArtworkDTO artworkDTO) {
         Artwork artwork = new Artwork();
-        artwork.setName(artworkDTO.getArtworkName());
+        artwork.setName(artworkDTO.getName());
 
         List<Author> authors = new ArrayList<>();
 
         for(AuthorDTO a : artworkDTO.getAuthors()) {
-            Author author = new Author();
-            author.setName(a.getName());
-            authorsDAO.persist(author);
+            Author author = authorsDAO.findOne(a.getId());
             authors.add(author);
         }
         artwork.setAuthors(authors);
+        Exhibition exhibition = exhibitionsDAO.findOne(artworkDTO.getExhibition().getId());
+        artwork.setExhibition(exhibition);
         artworksDAO.persist(artwork);
 
-        return Response.status(201).entity(artwork).build();
+        return Response.status(201).entity(artworkDTO).build();
     }
 
 }

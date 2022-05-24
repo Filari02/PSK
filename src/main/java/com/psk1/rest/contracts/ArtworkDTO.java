@@ -11,10 +11,12 @@ public class ArtworkDTO {
 
     private Integer id;
 
-    private String artworkName;
+    private String name;
 
-    private String exhibitionName;
+    private ExhibitionDTO exhibition;
 
     private List<AuthorDTO> authors;
 
 }
+
+

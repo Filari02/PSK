@@ -36,6 +36,7 @@ public class ExhibitionController {
         }
 
         ExhibitionDTO exhibitionDTO = new ExhibitionDTO();
+        exhibitionDTO.setId(exhibition.getId());
         exhibitionDTO.setName(exhibition.getName());
 
         return Response.ok(exhibitionDTO).build();
@@ -66,6 +67,7 @@ public class ExhibitionController {
     @Path("/post/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public Response createAuthor(ExhibitionDTO exhibitionDTO) {
         Exhibition exhibition = new Exhibition();
         exhibition.setName(exhibitionDTO.getName());

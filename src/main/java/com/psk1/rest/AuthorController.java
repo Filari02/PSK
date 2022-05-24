@@ -42,19 +42,19 @@ public class AuthorController {
         if (author == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-
         AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(author.getId());
         authorDTO.setName(author.getName());
 
         List<ArtworkDTO> artworkDTOS = new ArrayList<>();
 
         for (Artwork artwork: author.getArtworks()) {
             ArtworkDTO artworkDTO = new ArtworkDTO();
-            artwork.setName(artwork.getName());
+            artworkDTO.setId(artwork.getId());
+            artworkDTO.setName(artwork.getName());
 
             artworkDTOS.add(artworkDTO);
         }
-
         authorDTO.setArtworks(artworkDTOS);
 
         return Response.ok(authorDTO).build();
@@ -76,18 +76,18 @@ public class AuthorController {
             }
             existingAuthor.setName(authorDTO.getName());
 
-            List<Artwork> artworks = existingAuthor.getArtworks();
-
             for(ArtworkDTO a : authorDTO.getArtworks()) {
-                Artwork artwork = new Artwork();
-                artwork.setName(a.getArtworkName());
-                System.out.println(artwork.getName());
-                artworksDAO.persist(artwork);
-                artworks.add(artwork);
-            }
-            existingAuthor.setArtworks(artworks);
+                Artwork artwork = artworksDAO.findOne(a.getId());
+                List<Author> authors = artwork.getAuthors();
 
-            authorsDAO.update(existingAuthor);
+                if(authors.contains(existingAuthor)) {
+                    continue;
+                }
+                authors.add(existingAuthor);
+                artwork.setAuthors(authors);
+                artworksDAO.update(artwork);
+            }
+
 
             return Response.ok().build();
         } catch (OptimisticLockException ole) {
@@ -99,21 +99,20 @@ public class AuthorController {
     @Path("/post/")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @Transactional
     public Response createAuthor(AuthorDTO authorDTO) {
+
         Author author = new Author();
         author.setName(authorDTO.getName());
 
-        List<Artwork> artworks = new ArrayList<>();
-
         for(ArtworkDTO a : authorDTO.getArtworks()) {
-            Artwork artwork = new Artwork();
-            artwork.setName(a.getArtworkName());
+            Artwork artwork = artworksDAO.findOne(a.getId());
+            List<Author> authors = artwork.getAuthors();
+            authors.add(author);
+            artwork.setAuthors(authors);
             artworksDAO.persist(artwork);
-            artworks.add(artwork);
         }
-        author.setArtworks(artworks);
-        authorsDAO.persist(author);
 
-        return Response.status(201).entity(author).build();
+        return Response.status(201).entity(authorDTO).build();
     }
 }

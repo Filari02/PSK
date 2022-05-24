@@ -9,7 +9,7 @@ import java.util.List;
 
 @Entity
 @Getter@Setter
-public class Artwork {
+public class Artwork implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,7 +23,10 @@ public class Artwork {
     private Exhibition exhibition;
 
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "artwork_author",
+            joinColumns = @JoinColumn(name = "artworks_id"),
+            inverseJoinColumns = @JoinColumn(name = "authors_id"))
     private List<Author> authors;
 
     @Version
